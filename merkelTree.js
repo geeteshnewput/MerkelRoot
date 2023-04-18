@@ -14,7 +14,7 @@ class MerkelTree {
 
     hash(hashString) {
         // create Hash
-        return crypto.createHash('sha256').update(hashString).digest('hex');
+        return hashString ? crypto.createHash('sha256').update(hashString).digest('hex') : ''   ;
     }
 
     createTree() {
