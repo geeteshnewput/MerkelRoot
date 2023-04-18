@@ -1,9 +1,9 @@
 const crypto = require('crypto');
 
 class MerkelTree {
+    merkelTree = [];
     constructor(transactions = []) {
         this.transactions = transactions;
-        this.merkelTree = [];
         this.start();
       }
     
@@ -17,15 +17,20 @@ class MerkelTree {
         return crypto.createHash('sha256').update(hashString).digest('hex');
     }
 
-    createTree(transactions) {
+    createTree() {
             // Example:- 
             //             0123
             //     01              23
             
             // 0       1       2       3
 
+        // if transactions are not even we duplicate the last transactions.
+        if (this.transactions.length % 2 !== 0) {
+            this.transactions.push(this.transactions[this.transactions.length - 1]);
+        }
+
         // creating tree with leaf nodes and hashing it.
-        transactions.map(transaction => {
+        this.transactions.map(transaction => {
             const transactionHash = this.hash(transaction);
             this.merkelTree.push(transactionHash);
         });
@@ -41,14 +46,19 @@ class MerkelTree {
             }
             curLayer = nextLayer;
             // concating layer wise inside the merkelTree.
-            this.merkelTree.concat(curLayer);
+            this.merkelTree = [...this.merkelTree, ...nextLayer];
         }
     }
 
+    getMerkelTree() {
+        return this.merkelTree;
+    }
+
+    // fetching the merkel root which is in the last index
     fetchMerkelRoot() {
         return this.merkelTree[this.merkelTree.length - 1];
     }
-
+    // verify the transactions
     verifyTransaction() {
 
     }

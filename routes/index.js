@@ -7,6 +7,7 @@ router.get('/', async (req, res) => {
     const transactions = req.body?.transactions || txxn;
     const merkelTreeInstance = new MerkelTree(transactions);
     const responseObj = {
+      getMerkelTree: merkelTreeInstance.getMerkelTree(),
       merkelRoot: merkelTreeInstance.fetchMerkelRoot(),
     }
     res.status(200).json({responseObj})
